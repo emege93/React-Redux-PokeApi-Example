@@ -38,7 +38,7 @@ export const obtenerPokemonesAccion = () => async (dispatch, getState) => {
     }
 }
 
-export const siguientePokemonAccion = (numero) => async (dispatch, getState) => {
+export const siguientePokemonAccion = () => async (dispatch, getState) => {
 
     const {next} = getState().pokemones
 
@@ -52,4 +52,19 @@ export const siguientePokemonAccion = (numero) => async (dispatch, getState) => 
         console.log(error);
     }
 
+}
+
+export const anteriorPokemonAccion = () => async(dispatch, getState) => {
+
+    const {previous} = getState().pokemones
+
+    try {
+        const res = await axios.get(previous)
+        dispatch({
+            type: SIGUIENTE_POKEMONES_EXITO,
+            payload: res.data
+        })
+    } catch (error) {
+        console.log(error);
+    }
 }
