@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch,  useSelector} from "react-redux";
 import { obtenerPokemonesAccion, siguientePokemonAccion, anteriorPokemonAccion, pokeDetalleAccion } from "../redux/pokeDucks";
 import PokeDetalle from './PokeDetalle';
@@ -10,6 +10,13 @@ const Pokemones = () => {
     const pokemones = useSelector(store => store.pokemones.results)
     const next = useSelector(store => store.pokemones.next)
     const previous = useSelector(store => store.pokemones.previous)
+
+    useEffect(() => {
+        const fetchData = () => {
+            dispatch(obtenerPokemonesAccion())
+        }
+        fetchData()
+    }, [dispatch])
 
     return (
         <div className="row">
