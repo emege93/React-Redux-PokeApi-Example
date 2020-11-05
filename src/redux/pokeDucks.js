@@ -10,6 +10,7 @@ const dataInicial = {
 
 const OBTENER_POKEMONES_EXITO = 'OBTENER_POKEMONES_EXITO'
 const SIGUIENTE_POKEMONES_EXITO = 'SIGUIENTES_POKEMONES_EXITO'
+const POKE_INFO_EXITO = 'POKE_INFO_EXITO'
 
 //REDUCER
 export default function pokeReducer(state = dataInicial, action){
@@ -18,13 +19,34 @@ export default function pokeReducer(state = dataInicial, action){
             return {...state, ...action.payload}
         case SIGUIENTE_POKEMONES_EXITO:
             return {...state, ...action.payload}
+        case POKE_INFO_EXITO:
+            return {...state, unPokemon: action.payload}
         default:
             return state
     }
 }
 
 // ACCIONES
-export const obtenerPokemonesAccion = () => async (dispatch, getState) => {
+export const pokeDetalleAccion = (url = 'https://pokeapi.co/api/v2/pokemon/1/') => async (dispatch) => {
+
+    try {
+        const res = await axios.get(url)
+        console.log(res.data);
+        dispatch({
+            type: POKE_INFO_EXITO,
+            payload: {
+                nombre: res.data.name,
+                ancho: res.data.weight,
+                alto: res.data.height,
+                foto: res.data.sprites.front_default
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const obtenerPokemonesAccion = () => async (dispatch) => {
 
     if(localStorage.getItem('offset=0')){
         console.log('Usando datos Guardados');
