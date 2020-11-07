@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, NavLink, withRouter } from 'react-router-dom'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { cerrarSesionAccion } from '../redux/usuarioDucks'
 
 const Navbar = (props) => {
@@ -12,19 +12,23 @@ const Navbar = (props) => {
         props.history.push('/login')
     }
 
+    const activo = useSelector(state => state.usuario.activo)
+
     return (
         <div>
             <div className="navbar navbar-dark bg-dark">
                 <Link className="navbar-brand" to="/">APP POKE</Link>
                 <div className="d-flex">
-                    <NavLink className="btn btn-dark mr-2" to="/" exact>Inicio</NavLink>
-                    <NavLink className="btn btn-dark mr-2" to="/login" exact>Login</NavLink>
-                    <button
-                        className="btn btn-dark mr-2"
-                        onClick={() => cerrarSesion()}
-                    >
-                        Cerrar Sesion
-                    </button>
+                    {
+                        activo ? (
+                            <>
+                                <NavLink className="btn btn-dark mr-2" to="/" exact>Inicio</NavLink>
+                                <button className="btn btn-dark mr-2" onClick={() => cerrarSesion()}>Cerrar Sesion</button>
+                            </>
+                        ) : (
+                            <NavLink className="btn btn-dark mr-2" to="/login" exact>Login</NavLink>
+                        )
+                    }
                 </div>
             </div>
         </div>
