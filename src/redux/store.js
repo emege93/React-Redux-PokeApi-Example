@@ -2,7 +2,7 @@ import {applyMiddleware, combineReducers, createStore, compose} from 'redux'
 import thunk from 'redux-thunk';
 
 import pokeReducer from './pokeDucks'
-import usuarioReducer from './usuarioDucks';
+import usuarioReducer, { leerUsuarioActivoAccion } from './usuarioDucks';
 
 const rootReducer = combineReducers({
     pokemones: pokeReducer,
@@ -13,5 +13,6 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default function generateStore(){
     const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
+    leerUsuarioActivoAccion()(store.dispatch)
     return store;
 }
