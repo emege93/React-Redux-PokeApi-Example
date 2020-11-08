@@ -1,4 +1,4 @@
-import {auth, firebase, db} from '../firebase'
+import {auth, firebase, db, storage} from '../firebase'
 
 //DATA INICIAL
 const dataInicial = {
@@ -97,7 +97,6 @@ export const actualizarUsuarioAccion = (nombreActualizado) => async (dispatch, g
     })
 
     const {user} = getState().usuario
-    console.log(user);
 
     try {
 
@@ -108,6 +107,38 @@ export const actualizarUsuarioAccion = (nombreActualizado) => async (dispatch, g
         const usuario = {
             ...user,
             displayName: nombreActualizado
+        }
+
+        dispatch({
+            type: USUARIO_EXITO,
+            payload: usuario
+        })
+        localStorage.setItem('usuario', JSON.stringify(usuario))
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const editarFotoAccion = (imagenEditada) => async (dispatch, getState) => {
+    dispatch({
+        type: LOADING
+    })
+    const {user} = getState().usuario
+
+    try {
+
+        const imagenRef = await storage.ref().child(user.email).child('foto perfil')
+        await imagenRef.put(imagenEditada)
+        const imagenURL = await imagenRef.getDownloadURL()
+
+        await db.collection('usuarios').doc(user.email).update({
+            photoURL: imagenURL
+        })
+
+        const usuario = {
+            ...user,
+            photoURL: imagenURL
         }
 
         dispatch({
